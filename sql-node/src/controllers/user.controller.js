@@ -129,9 +129,23 @@ export const updateUser= async (req,res)=>{
 export const login = async (req,res)=>{
     const {address,contraseña}= req.body;
     const pool =await getConnect();
-    const existe=await pool.request().input("address",sql.VarChar,address).query('SELECT * FROM usuarios WHERE correo=@address');
+    const existe=await pool.request().input("address",sql.VarChar,address).query('SELECT contraseña FROM usuarios WHERE correo=@address');
     //traer elusuario de la base de datos por su email 
+     console.log(existe.recordset);
+    
     // desencryptar su contraseña
+    contraseñaDesencrypt= decrypt(existe.recordset);
     //  comparar las contraseñas
-
+    if(contraseñaDesencrypt!=contraseña){
+        return res.status(400).json({msg:'usuario no encontrado'});//buscar el estado para contraseñas incorrectas
+    }
+    //retornar todo correctos
+       // create token
+       tokUser= getToken({address,contraseña});
+    
+       //envismos el token al usuario logueado
+    res.header('auth-token', tokUser).json({
+        error: null,
+        data: {tokUser}
+    });
 }
