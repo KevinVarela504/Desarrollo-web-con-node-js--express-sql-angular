@@ -1,0 +1,29 @@
+@api=http://localhost:3000/users
+GET {{api}}
+
+###
+POST {{api}}
+Content-Type: application/json
+
+{
+    "name":"josu",
+    "address":"josu@hotmail.com",
+     "contraseña":"1y37jose"
+}
+
+###
+GET {{api}}/7
+
+###
+DELETE {{api}}/7
+
+
+###
+PUT {{api}}/6
+Content-Type: application/json
+
+{
+    "name":"jose",
+    "address":"jose@hotmail.com",
+    "contraseña":"josepip"
+}
